@@ -87,5 +87,5 @@ if [ "$1" = "config" ]; then
 	exit 0
 fi
 
-kstat -C -c net -n net0 -s rbytes64 | sed 's/.*\(.bytes\)64./\1.value /'
-kstat -C -c net -n net0 -s obytes64 | sed 's/.*\(.bytes\)64./\1.value /'
+kstat -C -c net -n $INTERFACE -s rbytes64 | sed 's/.*\(.bytes\)64./\1.value /'
+kstat -C -c net -n $INTERFACE -s obytes64 | sed 's/.*\(.bytes\)64./\1.value /'
