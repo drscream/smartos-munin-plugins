@@ -12,7 +12,7 @@ df - Plugin to monitor disk usage (measuring byte usage in percent)
 This shows the default configuration
 
   [df*]
-    env.df /usr/sbin/df
+    env.df /opt/local/bin/df
     env.warning 92
     env.critical 98
 
@@ -69,23 +69,23 @@ if [ "$1" = "config" ]; then
 
     $DF -k -l -x lofs $only | $TAIL +2 | while read dev size used avail pct mnt; do
 
-	case $dev:$mnt in
-	    /usr/lib*|ctfs:*|objfs:*|mnttab:*|sharefs:*|*:/cdrom/*|*:/media/*) continue;;
-	    swap:*) name=$(clean_fieldname $mnt);;
-	    *:*)    name=$(clean_fieldname $dev);;
-	esac
-        echo "$name.label $mnt"
-	print_warning "$name"
-	print_critical "$name"
+    case $dev:$mnt in
+        /usr/lib*|ctfs:*|objfs:*|mnttab:*|sharefs:*|*:/cdrom/*|*:/media/*) continue;;
+        swap:*) name=$(clean_fieldname $mnt);;
+        *:*)    name=$(clean_fieldname $dev);;
+    esac
+    echo "$name.label $mnt"
+    print_warning "$name"
+    print_critical "$name"
     done
     exit 0
 fi
 
 $DF -k -l -x lofs $only | $TAIL +2 | while read dev size used avail pct mnt; do
-	case $dev:$mnt in
-	    /usr/lib*|ctfs:*|objfs:*|mnttab:*|sharefs:*|*:/cdrom/*|*:/media/*) continue;;
-	    swap:*) name=$(clean_fieldname $mnt);;
-	    *:*)    name=$(clean_fieldname $dev);;
-	esac
-        echo "$name.value $pct" | cut -f1 -d% 
+    case $dev:$mnt in
+        /usr/lib*|ctfs:*|objfs:*|mnttab:*|sharefs:*|*:/cdrom/*|*:/media/*) continue;;
+        swap:*) name=$(clean_fieldname $mnt);;
+        *:*)    name=$(clean_fieldname $dev);;
+    esac
+    echo "$name.value $pct" | cut -f1 -d% 
 done
