@@ -45,7 +45,7 @@ GPLv2
 
 . $MUNIN_LIBDIR/plugins/plugin.sh
 
-DF=${df:-/usr/sbin/df}
+DF=${df:-/opt/local/bin/df}
 TAIL=/usr/bin/tail
 warning=${warning:-92}
 critical=${critical:-98}
@@ -67,7 +67,7 @@ if [ "$1" = "config" ]; then
     # device name.  Since the plugin already changed names this
     # should be ok.
 
-    $DF -k -l $only | $TAIL +2 | while read dev size used avail pct mnt; do
+    $DF -k -l -x lofs $only | $TAIL +2 | while read dev size used avail pct mnt; do
 
 	case $dev:$mnt in
 	    /usr/lib*|ctfs:*|objfs:*|mnttab:*|sharefs:*|*:/cdrom/*|*:/media/*) continue;;
@@ -81,7 +81,7 @@ if [ "$1" = "config" ]; then
     exit 0
 fi
 
-$DF -k -l $only | $TAIL +2 | while read dev size used avail pct mnt; do
+$DF -k -l -x lofs $only | $TAIL +2 | while read dev size used avail pct mnt; do
 	case $dev:$mnt in
 	    /usr/lib*|ctfs:*|objfs:*|mnttab:*|sharefs:*|*:/cdrom/*|*:/media/*) continue;;
 	    swap:*) name=$(clean_fieldname $mnt);;
