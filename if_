@@ -1,4 +1,4 @@
-#!/usr/xpg4/bin/sh
+#!/usr/bin/bash
 # -*- sh -*-
 
 : << =cut
@@ -85,7 +85,7 @@ if [ "$1" = "config" ]; then
 	print_warning obytes
 	print_critical obytes
 	exit 0
-fi;
+fi
 
-kstat -p -m '/^(?!unix)/' -n $INTERFACE -s '*bytes64' | sed \
-	's/.*\(.bytes\)64./\1.value /'
+kstat -C -c net -n net0 -s rbytes64 | sed 's/.*\(.bytes\)64./\1.value /'
+kstat -C -c net -n net0 -s obytes64 | sed 's/.*\(.bytes\)64./\1.value /'
