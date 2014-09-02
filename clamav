@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/bash
 #%# family=manual
 #%# capabilities=autoconf
 log=/var/log/clamav/clamd.log
