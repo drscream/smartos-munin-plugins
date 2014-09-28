@@ -211,7 +211,7 @@ switch ($0) {
             print "graph_args -l 0\n";
             print "master_last_io_seconds_ago.warning 0:20\n";
             print "master_last_io_seconds_ago.critical 0:60\n";
-            print "master_last_io_seconds_ago.label Number of seconds since the last interaction with master\n";
+            print "master_last_io_seconds_ago.label Seconds since the last interaction with master\n";
             exit 0;
         }
 
