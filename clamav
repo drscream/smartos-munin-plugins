@@ -1,6 +1,8 @@
 #!/usr/bin/bash
 #%# family=manual
 #%# capabilities=autoconf
+
+PATH=/opt/local/bin:${PATH}
 log=/var/log/clamav/clamd.log
 
 if [ "$1" = "autoconf" ]; then
