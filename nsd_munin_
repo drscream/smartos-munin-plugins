@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/bash
 #
 # plugin for munin to monitor usage of NSD.
 #
@@ -19,10 +19,10 @@
 # with:
 # [nsd_munin*]
 # user root
-# env.statefile /usr/local/var/munin/plugin-state/nsd-state
-# env.nsd_conf /usr/local/etc/nsd.conf
-# env.nsd_control /usr/local/sbin/nsd-control
-# env.nsd_checkconf /usr/local/sbin/nsd-checkconf
+# env.statefile /opt/local/var/munin/plugin-state/nsd-state
+# env.nsd_conf /opt/local/etc/nsd.conf
+# env.nsd_control /opt/local/sbin/nsd-control
+# env.nsd_checkconf /opt/local/sbin/nsd-checkconf
 #
 # This plugin can create different graphs depending on what name
 # you link it as (with ln -s) into the plugins directory
@@ -58,10 +58,10 @@ System with NSD daemon.
 
   [nsd_munin*]
   user root
-  env.statefile /usr/local/var/munin/plugin-state/nsd-state
-  env.nsd_conf /usr/local/etc/nsd.conf
-  env.nsd_control /usr/local/sbin/nsd-control
-  env.nsd_checkconf /usr/local/sbin/nsd-checkconf
+  env.statefile /opt/local/var/munin/plugin-state/nsd-state
+  env.nsd_conf /opt/local/etc/nsd.conf
+  env.nsd_control /opt/local/sbin/nsd-control
+  env.nsd_checkconf /opt/local/sbin/nsd-checkconf
 
 Use the .env settings to override the defaults.
 
@@ -87,10 +87,10 @@ BSD
 
 =cut
 
-state=${statefile:-/usr/local/var/munin/plugin-state/nsd-state}
-conf=${nsd_conf:-/usr/local/etc/nsd.conf}
-ctrl=${nsd_control:-/usr/local/sbin/nsd-control}
-chkconf=${nsd_checkconf:-/usr/local/sbin/nsd-checkconf}
+state=${statefile:-/opt/local/var/munin/plugin-state/nsd-state}
+conf=${nsd_conf:-/opt/local/etc/nsd/nsd.conf}
+ctrl=${nsd_control:-/opt/local/sbin/nsd-control}
+chkconf=${nsd_checkconf:-/opt/local/sbin/nsd-checkconf}
 lock=$state.lock
 
 # number of seconds between polling attempts.
