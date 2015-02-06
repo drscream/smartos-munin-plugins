@@ -20,6 +20,7 @@ $login = 0;
 $pop3login = 0;
 $imaplogin = 0;
 $tls = 0;
+$starttls = 0;
 $ssl = 0;
 $aborted = 0;
 
@@ -135,6 +136,10 @@ if ( $ARGV[0] and $ARGV[0] eq "config" ) {
   print "tls.type GAUGE\n";
   print "tls.draw LINE1\n";
   print "tls.min 0\n";
+  print "starttls.label StartTLS\n";
+  print "starttls.type GAUGE\n";
+  print "starttls.draw LINE1\n";
+  print "starttls.min 0\n";
   print "ssl.label SSL\n";
   print "ssl.type GAUGE\n";
   print "ssl.draw LINE1\n";
@@ -164,6 +169,7 @@ if (! -f $logfile and ! -f $rotlogfile) {
   print "pop3login.value U\n";
   print "imaplogin.value U\n";
   print "tls.value U\n";
+  print "starttls.value U\n";
   print "ssl.value U\n";
   print "aborted.value U\n";
 
@@ -233,6 +239,7 @@ print "login.value $login\n";
 print "pop3login.value $pop3login\n";
 print "imaplogin.value $imaplogin\n";
 print "tls.value $tls\n";
+print "starttls.value $starttls\n";
 print "ssl.value $ssl\n";
 print "aborted.value $aborted\n";
 
@@ -253,16 +260,15 @@ sub parseDovecotfile {
       $login++;
 
       if ($line =~ m/TLS/) {
+        $tls++;
         if ($line =~ m/:143/ ||
             $line =~ m/:110/) {
-            $tls++;
-        } elsif ($line =~ m/:993/ ||
-            $line =~ m/:995/) {
-            $ssl++;
-        } else {
-            $tls++;
+            $starttls++;
         }
+      } elsif ($line =~ m/SSL/} {
+        $ssl++;
       }
+
       if (     $line =~ m/pop3-login:/) {
         $pop3login++;
       } elsif ($line =~ m/imap-login:/) {
