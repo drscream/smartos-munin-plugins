@@ -75,6 +75,14 @@ if ( $ARGV[0] and $ARGV[0] eq "config" ) {
   print "connectionspop3.type GAUGE\n";
   print "connectionspop3.draw STACK\n";
   print "connectionspop3.min 0\n";
+  print "connectionsproxyimap.label PROXY-IMAP\n";
+  print "connectionsproxyimap.type GAUGE\n";
+  print "connectionsproxyimap.draw AREA\n";
+  print "connectionsproxyimap.min 0\n";
+  print "connectionsproxypop3.label PROXY-POP3\n";
+  print "connectionsproxypop3.type GAUGE\n";
+  print "connectionsproxypop3.draw STACK\n";
+  print "connectionsproxypop3.min 0\n";
 
   print "multigraph dovecot_connected\n";
   print "graph_title Dovecot connected users\n";
@@ -93,6 +101,14 @@ if ( $ARGV[0] and $ARGV[0] eq "config" ) {
   print "connectedpop3.type GAUGE\n";
   print "connectedpop3.draw STACK\n";
   print "connectedpop3.min 0\n";
+  print "connectedproxyimap.label PROXY-IMAP\n";
+  print "connectedproxyimap.type GAUGE\n";
+  print "connectedproxyimap.draw AREA\n";
+  print "connectedproxyimap.min 0\n";
+  print "connectedproxypop3.label PROXY-POP3\n";
+  print "connectedproxypop3.type GAUGE\n";
+  print "connectedproxypop3.draw STACK\n";
+  print "connectedproxypop3.min 0\n";
 
   print "multigraph dovecot_logins\n";
   print "graph_title Dovecot logins\n";
@@ -131,10 +147,14 @@ if (! -f $logfile and ! -f $rotlogfile) {
   print "connections.value U";
   print "connectionsimap.value U";
   print "connectionspop3.value U";
+  print "connectionsproxyimap.value U";
+  print "connectionsproxypop3.value U";
   print "multigraph dovecot_connected\n";
   print "connected.value U\n";
   print "connectedimap.value U\n";
   print "connectedpop3.value U\n";
+  print "connectedproxyimap.value U\n";
+  print "connectedproxypop3.value U\n";
   print "multigraph dovecot_logins\n";
   print "login.value U\n";
   print "pop3login.value U\n";
@@ -153,14 +173,24 @@ $connectedpop3   = `$DOVEADM -f flow who    | grep pop3 | wc -l`;
 $connectionsimap = `$DOVEADM -f flow who -1 | grep imap | wc -l`;
 $connectionspop3 = `$DOVEADM -f flow who -1 | grep pop3 | wc -l`;
 
+$connectedproxyimap   = `$DOVEADM -f proxy list | sort | uniq | grep imap | wc -l`;
+$connectedproxypop3   = `$DOVEADM -f proxy list | sort | uniq | grep pop3 | wc -l`;
+$connectionsproxyimap = `$DOVEADM -f proxy list | grep imap | wc -l`;
+$connectionsproxypop3 = `$DOVEADM -f proxy list | grep pop3 | wc -l`;
+
 #trim
 $connectedimap   =~ s/\s+$//;
 $connectedpop3   =~ s/\s+$//;
 $connectionsimap =~ s/\s+$//;
 $connectionspop3 =~ s/\s+$//;
 
-$connected   = $connectedimap   + $connectedpop3;
-$connections = $connectionsimap + $connectionspop3;
+$connectedproxyimap   =~ s/\s+$//;
+$connectedproxypop3   =~ s/\s+$//;
+$connectionsproxyimap =~ s/\s+$//;
+$connectionsproxypop3 =~ s/\s+$//;
+
+$connected   = $connectedimap   + $connectedpop3 + $connectedproxyimap + $connectedproxypop3;
+$connections = $connectionsimap + $connectionspop3 + $connectionsproxyimap + $connectionsproxypop3;
 
 my ($pos) = restore_state();
 
@@ -186,10 +216,14 @@ print "multigraph dovecot_connections\n";
 print "connections.value $connections\n";
 print "connectionsimap.value $connectionsimap\n";
 print "connectionspop3.value $connectionspop3\n";
+print "connectionsproxyimap.value $connectionsproxyimap\n";
+print "connectionsproxypop3.value $connectionsproxypop3\n";
 print "multigraph dovecot_connected\n";
 print "connected.value $connected\n";
 print "connectedimap.value $connectedimap\n";
 print "connectedpop3.value $connectedpop3\n";
+print "connectedproxyimap.value $connectedproxyimap\n";
+print "connectedproxypop3.value $connectedproxypop3\n";
 print "multigraph dovecot_logins\n";
 print "login.value $login\n";
 print "pop3login.value $pop3login\n";
