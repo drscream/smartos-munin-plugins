@@ -261,8 +261,8 @@ sub parseDovecotfile {
 
       if ($line =~ m/TLS/) {
         $tls++;
-        if ($line =~ m/:143/ ||
-            $line =~ m/:110/) {
+        if ($line =~ m/lport=143/ ||
+            $line =~ m/lport=110/) {
             $starttls++;
         }
       } elsif ($line =~ m/SSL/} {
