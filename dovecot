@@ -262,6 +262,7 @@ sub parseDovecotfile {
         } else {
             $tls++;
         }
+      }
       if (     $line =~ m/pop3-login:/) {
         $pop3login++;
       } elsif ($line =~ m/imap-login:/) {
