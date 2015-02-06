@@ -21,7 +21,7 @@ $aborted = 0;
 
 ($dirname = $0) =~ s/[^\/]+$//;
 
-$logfile = $ENV{'LOGFILE'} || '/var/log/maillog';
+$logfile = $ENV{'LOGFILE'} || '/var/log/dovecot/info';
 
 # Use an overrided $PATH for all external programs if needed
 $DOVEADM = "/opt/local/bin/doveadm";
@@ -207,8 +207,6 @@ sub parseDovecotfile {
   while (tell (logf) < $stop) {
     my $line =<logf>;
     chomp ($line);
-
-    if ($line !~ m/dovecot/) { next; }
 
     if ($line =~ m/Aborted/) {
       $aborted++;
