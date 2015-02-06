@@ -177,10 +177,10 @@ $connectedpop3   = `$DOVEADM -f flow who    | grep pop3 | wc -l`;
 $connectionsimap = `$DOVEADM -f flow who -1 | grep imap | wc -l`;
 $connectionspop3 = `$DOVEADM -f flow who -1 | grep pop3 | wc -l`;
 
-$connectedproxyimap   = `$DOVEADM -f proxy list | sort | uniq | grep imap | wc -l`;
-$connectedproxypop3   = `$DOVEADM -f proxy list | sort | uniq | grep pop3 | wc -l`;
-$connectionsproxyimap = `$DOVEADM -f proxy list | grep imap | wc -l`;
-$connectionsproxypop3 = `$DOVEADM -f proxy list | grep pop3 | wc -l`;
+$connectedproxyimap   = `$DOVEADM -f flow proxy list | sort | uniq | grep imap | wc -l`;
+$connectedproxypop3   = `$DOVEADM -f flow proxy list | sort | uniq | grep pop3 | wc -l`;
+$connectionsproxyimap = `$DOVEADM -f flow proxy list | grep imap | wc -l`;
+$connectionsproxypop3 = `$DOVEADM -f flow proxy list | grep pop3 | wc -l`;
 
 #trim
 $connectedimap   =~ s/\s+$//;
@@ -252,12 +252,16 @@ sub parseDovecotfile {
     } elsif ($line =~ m/Login:/) {
       $login++;
 
-      if (     $line =~ m/TLS/) {
-        $tls++;
-      } elsif ($line =~ m/SSL/) {
-        $ssl++;
-      }
-
+      if ($line =~ m/TLS/) {
+        if ($line =~ m/:143/ ||
+            $line =~ m/:110/) {
+            $tls++;
+        } elsif ($line =~ m/:993/ ||
+            $line =~ m/:995/) {
+            $ssl++;
+        } else {
+            $tls++;
+        }
       if (     $line =~ m/pop3-login:/) {
         $pop3login++;
       } elsif ($line =~ m/imap-login:/) {
