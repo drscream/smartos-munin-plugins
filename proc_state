@@ -1,0 +1,43 @@
+#!/bin/sh
+
+if [ "$1" = "autoconf" ]; then
+	echo 'yes'
+	exit 0
+fi
+
+if [ "$1" = "config" ]; then
+	cat <<EOF
+graph_title Processes
+graph_category processes
+graph_scale no
+graph_vlabel processes
+graph_args --base 1000 -l 0
+graph_info Number of processes per state
+O.label on-cpu
+S.label sleeping
+R.label runnable
+T.label stopped
+W.label waiting
+Z.label zombie
+EOF
+	exit 0
+fi
+
+ps -A -o s | awk '
+NR > 1 {
+	a[$1]++
+}
+BEGIN {
+	a["O"] = 0
+	a["S"] = 0
+	a["R"] = 0
+	a["T"] = 0
+	a["W"] = 0
+	a["Z"] = 0
+}
+END {
+	for(k in a) {
+		print k ".value", a[k]
+	}
+}'
+

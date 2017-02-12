@@ -1,0 +1,31 @@
+#!/bin/sh
+
+if [ "$1" = "autoconf" ]; then
+	echo 'yes'
+	exit 0
+fi
+
+# dirtyconfig
+if [ "$1" = "config" ]; then
+	cat <<EOF
+graph_title Memory Utilization by User
+graph_category memory
+graph_vlabel byte
+graph_args --base 1024 -l 0
+graph_info Memory utilization by User
+EOF
+	ps -A -o user,rss | awk '
+	NR > 1 {
+		a[$1] += ($2 * 1024)
+	}
+	END {
+		for(k in a) {
+			print "u" k ".label", k
+			print "u" k ".value", a[k]
+			print "u" k ".draw AREASTACK"
+		}
+	}' | sort
+	exit 0
+fi
+
+

@@ -1,0 +1,37 @@
+#!/bin/sh
+
+if [ "$1" = "autoconf" ]; then
+	echo 'yes'
+	exit 0
+fi
+
+if [ "$1" = "config" ]; then
+	cat <<EOF
+graph_title UDP Datagrams
+graph_category network
+graph_vlabel datagrams in (-) / out (+) per \${graph_period}
+graph_args --base 1000
+graph_info per zone udp datagrams
+inDatagrams.label in
+inDatagrams.type DERIVE
+inDatagrams.min 0
+inDatagrams.graph no
+outDatagrams.label udp
+outDatagrams.type DERIVE
+outDatagrams.min 0
+outDatagrams.negative inDatagrams
+inErrors.label inerrors
+inErrors.type DERIVE
+inErrors.min 0
+inErrors.graph no
+inErrors.warning 1
+outErrors.label errors
+outErrors.type DERIVE
+outErrors.min 0
+outErrors.negative inErrors
+outErrors.warning 1
+EOF
+	exit 0
+fi
+
+kstat -p udp:*:udp:inDatagrams udp:*:udp:outDatagrams udp:*:udp:inErrors udp:*:udp:outErrors | sed 's/.*://' | awk '{ print $1 ".value", $2 }'

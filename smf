@@ -1,0 +1,47 @@
+#!/bin/sh
+
+if [ "$1" = "autoconf" ]; then
+	echo 'yes'
+	exit 0
+fi
+
+if [ "$1" = "config" ]; then
+	cat <<EOF
+graph_title SMF Services
+graph_category processes
+graph_scale no
+graph_vlabel services
+graph_args --base 1000 -l 0
+graph_info Number of SMF services per state
+online.label online
+disabled.label disabled
+maintenance.label maintenance
+maintenance.warning 1
+degraded.label degraded
+degraded.warning 1
+offline.label offline
+legacy_run.label legacy_run
+uninitialized.label uninitialized
+EOF
+	exit 0
+fi
+
+
+svcs -a -o state,nstate | awk '
+NR > 1 {
+	a[$1]++
+}
+BEGIN {
+	a["degraded"]      = 0
+	a["disabled"]      = 0
+	a["maintenance"]   = 0
+	a["offline"]       = 0
+	a["online"]        = 0
+	a["uninitialized"] = 0
+	a["legacy_run"]    = 0
+}
+END {
+	for(k in a) {
+		print k ".value", a[k]
+	}
+}'
