@@ -1,0 +1,27 @@
+#!/bin/sh
+
+if [ "$1" = "autoconf" ]; then
+	echo 'yes'
+	exit 0
+fi
+
+if [ "$1" = "config" ]; then
+	cat <<EOF
+graph_title VFS I/O
+graph_category disk
+graph_vlabel read(-) / write(+) in bytes/\${graph_period}
+graph_args --base 1024
+graph_info per zone vfs io
+nread.label read
+nread.type DERIVE
+nread.min 0
+nread.graph no
+nwritten.label io
+nwritten.type DERIVE
+nwritten.min 0
+nwritten.negative nread
+EOF
+	exit 0
+fi
+
+kstat -p zone_vfs:*:*:nread zone_vfs:*:*:nwritten | sed 's/.*://g' | awk '{ print $1 ".value", $2 }'
