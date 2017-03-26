@@ -15,7 +15,7 @@
 #%# capabilities=autoconf
 
 MAXLABEL=20
-PATH=/opt/local/bin;${PATH}
+PATH=/opt/local/bin:${PATH}
 
 mktempfile () {
 mktemp -t $1

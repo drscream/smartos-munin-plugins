@@ -13,7 +13,7 @@ if [ "$1" = 'config' ]; then
 	echo "unknown.label Login unknown"
 fi
 
-PATH=/opt/local/bin;${PATH}
+PATH=/opt/local/bin:${PATH}
 LOGFILE=${LOGFILE:-"/var/log/proftpd/proftpd.log"}
 
 succes=$(grep -c "successful" "$LOGFILE")
