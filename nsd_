@@ -17,7 +17,7 @@
 #
 # You can set them in your munin/plugin-conf.d/plugins.conf file
 # with:
-# [nsd_munin*]
+# [nsd_*]
 # user root
 # env.statefile /opt/local/var/munin/plugin-state/nsd-state
 # env.nsd_conf /opt/local/etc/nsd.conf
@@ -30,13 +30,13 @@
 # If you are only a casual user, the _hits and _by_type are most interesting,
 # possibly followed by _by_rcode.
 #
-#	nsd_munin_hits		- base volume, transport type, failures 
-#	nsd_munin_memory	- memory usage
-#	nsd_munin_by_type	- incoming queries by type
-#	nsd_munin_by_class	- incoming queries by class
-#	nsd_munin_by_opcode	- incoming queries by opcode
-#	nsd_munin_by_rcode	- answers by rcode
-#	nsd_munin_zones		- number of zones
+#	nsd_hits		- base volume, transport type, failures 
+#	nsd_memory	- memory usage
+#	nsd_by_type	- incoming queries by type
+#	nsd_by_class	- incoming queries by class
+#	nsd_by_opcode	- incoming queries by opcode
+#	nsd_by_rcode	- answers by rcode
+#	nsd_zones		- number of zones
 #
 # Magic markers - optional - used by installation scripts and
 # munin-config:
@@ -48,7 +48,7 @@
 : <<=cut
 =head1 NAME
 
-nsd_munin_ - Munin plugin to monitor the NSD server.
+nsd_ - Munin plugin to monitor the NSD server.
 
 =head1 APPLICABLE SYSTEMS
 
@@ -56,7 +56,7 @@ System with NSD daemon.
 
 =head1 CONFIGURATION
 
-  [nsd_munin*]
+  [nsd_*]
   user root
   env.statefile /opt/local/var/munin/plugin-state/nsd-state
   env.nsd_conf /opt/local/etc/nsd.conf
@@ -69,13 +69,13 @@ Use the .env settings to override the defaults.
 
 Can be used to present different graphs. Use ln -s for that name in
 the plugins directory to enable the graph.
-nsd_munin_hits		- base volume, transport type, failures 
-nsd_munin_memory	- memory usage
-nsd_munin_by_type	- incoming queries by type
-nsd_munin_by_class	- incoming queries by class
-nsd_munin_by_opcode	- incoming queries by opcode
-nsd_munin_by_rcode	- answers by rcode
-nsd_munin_zones		- number of zones
+nsd_hits		- base volume, transport type, failures 
+nsd_memory	- memory usage
+nsd_by_type	- incoming queries by type
+nsd_by_class	- incoming queries by class
+nsd_by_opcode	- incoming queries by opcode
+nsd_by_rcode	- answers by rcode
+nsd_zones		- number of zones
 
 =head1 AUTHOR
 
@@ -187,7 +187,7 @@ if test "$1" = "suggest" ; then
 fi
 
 # determine my type, by name
-id=`echo $0 | sed -e 's/^.*nsd_munin_//'`
+id=`echo $0 | sed -e 's/^.*nsd_//'`
 if test "$id"x = ""x; then
 	# some default to keep people sane.
 	id="hits"
