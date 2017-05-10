@@ -16,9 +16,9 @@ graph_info Number of SMF services per state
 online.label online
 disabled.label disabled
 maintenance.label maintenance
-maintenance.warning 1
+maintenance.warning 0
 degraded.label degraded
-degraded.warning 1
+degraded.warning 0
 offline.label offline
 legacy_run.label legacy_run
 uninitialized.label uninitialized
