@@ -13,24 +13,33 @@ graph_vlabel connections
 graph_args --base 1000 -l 0
 graph_info This graph shows the TCP connections states of all the network interfaces combined
 CLOSED.label CLOSED
+CLOSED.colour COLOUR3
 IDLE.label IDLE
+IDLE.colour COLOUR6
 BOUND.label BOUND
+BOUND.colour COLOUR12
 LISTEN.label LISTEN
+LISTEN.colour COLOUR0
 SYN_SENT.label SYN_SENT
 SYN_RCVD.label SYN_RCVD
 ESTABLISHED.label ESTABLISHED
+ESTABLISHED.colour COLOUR1
 CLOSE_WAIT.label CLOSE_WAIT
 FIN_WAIT_1.label FIN_WAIT_1
 CLOSING.label CLOSING
 LAST_ACK.label LAST_ACK
 FIN_WAIT_2.label FIN_WAIT_2
 TIME_WAIT.label TIME_WAIT
+TIME_WAIT.colour COLOUR2
 EOF
 	exit 0
 fi
 
 netstat -an -P tcp -f inet -f inet6 | awk '
-NF < 1 { header = NR} header + 3 < NR {
+NF < 1 {
+	header = NR
+} 
+header + 3 < NR {
 	states[$7]++
 }
 BEGIN {
