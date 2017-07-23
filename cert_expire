@@ -54,10 +54,10 @@ for location in ${crt_locations}; do
 
                 # Additional config output for Munin
                 if [[ "${1}" == "config" ]]; then
-                        echo ${x509_hash}.label ${x509_subject}
-                        echo ${x509_hash}.info ${crt}
-                        echo ${x509_hash}.critical 14:
-                        echo ${x509_hash}.warning 30:
+                        echo "${x509_hash}.label ${x509_subject}"
+                        echo "${x509_hash}.info ${crt}"
+                        echo "${x509_hash}.critical 14:"
+                        echo "${x509_hash}.warning 30:"
                 fi
 
                 # Munin value output with expire in days
