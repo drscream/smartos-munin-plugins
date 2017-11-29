@@ -12,7 +12,7 @@ df_inode - Plugin to monitor disk usage (measuring inode usage in percent)
 This shows the default configuration
 
   [df*]
-    env.df /opt/local/bin/df
+    env.df /usr/sbin/df
     env.warning 92
     env.critical 98
 
@@ -46,14 +46,14 @@ GPLv2
 
 . $MUNIN_LIBDIR/plugins/plugin.sh
 
-DF=${df:-/opt/local/bin/df}
+DF=${df:-/usr/sbin/df}
 TAIL=/usr/bin/tail
 warning=${warning:-92}
 critical=${critical:-98}
 
 # Figure out correct way to invoke df and what output to use
 if $DF -P -l -i $only >/dev/null 2>&1; then
-    DF="$DF -x lofs -P -l -i $only"
+    DF="$DF -P -l -i $only"
     FSNAME=6
 else
     DF="$DF -oi $only 2>/dev/null"
@@ -86,7 +86,7 @@ if [ "$1" = "config" ]; then
             6) mnt=$six;;
         esac
         case $dev:$mnt in
-            /usr/lib*|ctfs:*|objfs:*|mnttab:*|sharefs:*|*:/cdrom/*|*:/media/*) continue;;
+            /.zonecontrol:*|/lib:*|/lib/*|/usr:*|/usr/*|/sbin:*|/bin:*|*:/system/*|proc:*|mnttab:*|fd:*|/dev:*|*:/etc/svc/volatile) continue;;
             swap:*) name=$(clean_fieldname $mnt);;
             *)      name=$(clean_fieldname $dev);;
         esac
@@ -107,7 +107,7 @@ eval $DF | $TAIL +2 | while read dev size used avail pct mnt; do
         6) mnt=$six;;
     esac
     case $dev in
-        /usr/lib*|ctfs:*|objfs:*|mnttab:*|sharefs:*|*:/cdrom/*|*:/media/*) continue;;
+        /.zonecontrol:*|/lib:*|/lib/*|/usr:*|/usr/*|/sbin:*|/bin:*|*:/system/*|proc:*|mnttab:*|fd:*|/dev:*|*:/etc/svc/volatile) continue;;
         swap:*) name=$(clean_fieldname $mnt);;
         *)      name=$(clean_fieldname $dev);;
     esac
