@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ksh93
 # Thomas Merkel <tm@core.io>
 # This script provides the option to check all installed certificates on an operating system
 # with munin. It's build to run on SmartOS zones and somehow also build for Let's Encrypt.
@@ -16,7 +16,7 @@ crt_ignores="mozilla-rootcert-.* privkey.* .*-certbot.pem fullchain.pem chain.pe
 crt_locations_ignores="/opt/local/etc/letsencrypt/archive"
 
 # Now
-today_unixtime=$(date +%s)
+today_unixtime=$(printf "%(%s)T")
 
 # Munin config output
 if [[ "${1}" == "config" ]]; then
@@ -48,7 +48,7 @@ for location in ${crt_locations}; do
                 # Parse certificate to receive CommonName
                 x509_subject=$(echo ${x509} | gsed 's/.*CN=\([^\ |,]*\).*/\1/')
                 # Receive expire unixtime
-                expire_unixtime=$(dateconv -i "%b %d %H:%M:%S %Y %Z" -f "%s" "$(echo ${x509} | gsed 's/.*notAfter=\([^,]*\)\ .*/\1/')")
+                expire_unixtime=$(printf "%(%s)T" "$(echo ${x509} | gsed -n 's/.*notAfter=\([^,]*\)\ .*/\1/p')")
                 # Require minimal hash for munin output for all values
                 x509_hash=$(echo ${x509} | awk -F' ' '{ print $NF }')
 
@@ -57,7 +57,7 @@ for location in ${crt_locations}; do
                         echo "${x509_hash}.label ${x509_subject}"
                         echo "${x509_hash}.info ${crt}"
                         echo "${x509_hash}.critical 7:"
-                        echo "${x509_hash}.warning 14:"
+                        echo "${x509_hash}.warning 10:"
                 fi
 
                 # Munin value output with expire in days
