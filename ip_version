@@ -1,0 +1,49 @@
+#!/bin/sh
+
+if [ "$1" = "autoconf" ]; then
+	echo yes
+	exit 0
+fi
+
+if [ "$1" = "config" ]; then
+	cat <<"EOF"
+graph_title Packets per IP Version
+graph_category network
+graph_args --base 1000
+graph_info This graph shows IPv4/IPv6 packets
+graph_vlabel IPv4 (-) / IPv6 (+) packets per ${graph_period}
+v4.label IPv4
+v4.type DERIVE
+v4.min 0
+v4.graph no
+v6.label Packets
+v6.type DERIVE
+v6.min 0
+v6.negative v4
+EOF
+	exit 0
+fi
+
+netstat -s | awk '
+BEGIN {
+ v4 = 0
+ v6 = 0
+}
+/ipInDelivers/ {
+ gsub("=", "")
+ v4 = $2 + $4
+}
+/ipv6InDelivers/ {
+ gsub("=", "")
+ v6 += $2
+}
+/ipv6OutRequests/ {
+ gsub("=", "")
+ v6 += $2
+}
+END {
+ print "v4.value " v4
+ print "v6.value " v6
+}
+'
+
