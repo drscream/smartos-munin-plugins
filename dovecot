@@ -265,7 +265,7 @@ sub parseDovecotfile {
             $line =~ m/lport=110/) {
             $starttls++;
         }
-      } elsif ($line =~ m/SSL/} {
+      } elsif ($line =~ m/SSL/) {
         $ssl++;
       }
 
