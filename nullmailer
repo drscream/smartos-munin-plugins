@@ -1,26 +1,24 @@
 #!/usr/bin/bash
 
-#%# family=auto
-#%# capabilities=autoconf
+. ${MUNIN_LIBDIR}/plugins/plugin.sh
 
-if [ "$1" = "autoconf" ]; then
-  if [ `uname -s` = SunOS ]; then
-    echo no
-    exit 1
-  else
-    echo yes
-    exit 0
-  fi
-fi
+NULLMAILER_QUEUE=${NULLMAILER_QUEUE:-'/var/spool/nullmailer/queue/'}
 
-if [ "$1" = "config" ]; then
-  echo 'graph_category mail'
-  echo 'graph_title Nullmailer queue'
-  echo 'graph_vlabel mails'
-  echo 'mails.label number'
-  echo 'mails.min 0'
-  exit 0
-fi
+case ${1} in
+	autoconf)
+		echo 'yes'
+		exit 0
+		;;
+	config)
+		cat <<-EOF
+		graph_category mail'
+		graph_title Nullmailer queue'
+		graph_vlabel mails'
+		mails.label number'
+		mails.min 0'
+		EOF
+		exit 0
+		;;
+esac
 
-echo -n "mails.value"
-/usr/bin/ls -l /var/spool/nullmailer/queue/ | /opt/local/bin/grep -v total | /usr/bin/wc -l
+echo "mails.value $(($(stat -c "%s" ${NULLMAILER_QUEUE}) - 2))"
