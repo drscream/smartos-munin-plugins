@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Dovecot v2.1+ supports gathering statistics to Munin
+
+. ${MUNIN_LIBDIR}/plugins/plugin.sh
+
+DOVEADM=${DOVEADM:-'/opt/local/bin/doveadm'}
+
+case ${1} in
+	autoconf)
+		echo 'yes'
+		exit 0
+		;;
+	config)
+		cat <<-EOF
+		graph_title     Dovecot Authentications
+		graph_category  mail
+		graph_scale     no
+		graph_args      --base 1000
+		graph_vlabel    authentications per \${graph_period}
+		auth_ok.label                Successful
+		auth_ok.type                 DERIVE
+		auth_ok.min                  0
+		auth_user_unknown.label      User Unknown
+		auth_user_unknown.type       DERIVE
+		auth_user_unknown.min        0
+		auth_password_mismatch.label Password Mismatch
+		auth_password_mismatch.type  DERIVE
+		auth_password_mismatch.min   0
+		EOF
+		exit 0
+		;;
+esac
+
+${DOVEADM} -f tab stats dump -f count | awk 'NR>1 { print $1".value "$3 }'

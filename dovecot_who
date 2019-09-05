@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Dovecot current connected users via dovecot tooling
+
+. ${MUNIN_LIBDIR}/plugins/plugin.sh
+
+DOVEADM=${DOVEADM:-'/opt/local/bin/doveadm'}
+
+case ${1} in
+autoconf)
+	echo 'yes'
+	exit 0
+	;;
+config)
+	cat <<-EOF
+	graph_title     Dovecot Connected Users
+	graph_category  mail
+	graph_scale     no
+	graph_args      --base 1000
+	users.label       Users
+	users.type        GAUGE
+	connections.label Connections
+	connections.type  GAUGE
+	EOF
+	exit 0
+	;;
+esac
+
+${DOVEADM} who | awk 'NR>1 { con+=$2; users+=1 } END { printf "connections.value %d\nusers.value %d\n", con, users }'
