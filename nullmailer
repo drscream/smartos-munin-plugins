@@ -11,11 +11,11 @@ case ${1} in
 		;;
 	config)
 		cat <<-EOF
-		graph_category mail'
-		graph_title Nullmailer queue'
-		graph_vlabel mails'
-		mails.label number'
-		mails.min 0'
+		graph_category mail
+		graph_title Nullmailer queue
+		graph_vlabel mails
+		mails.label number
+		mails.min 0
 		EOF
 		exit 0
 		;;
