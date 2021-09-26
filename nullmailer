@@ -17,6 +17,8 @@ case ${1} in
 		mails.label number
 		mails.min 0
 		EOF
+		print_warning mails
+		print_critical mails
 		exit 0
 		;;
 esac
