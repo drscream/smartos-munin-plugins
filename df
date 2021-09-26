@@ -1,47 +1,43 @@
 #!/bin/bash
 # -*- sh -*-
 
-: << =cut
-
-=head1 NAME
-
-df - Plugin to monitor disk usage (measuring byte usage in percent)
-
-=head1 CONFIGURATION
-
-This shows the default configuration
-
-  [df*]
-    env.df /usr/sbin/df
-    env.warning 92
-    env.critical 98
-
-A device specific warning/critical level is also supported.  Append
-the munin label (shown in the plugin display page) and append _warning
-or _critical respectively to get the (environment variable) name.
-
-To limit the monitored filesystems, configure the "only" environment variable.
-For example, to only monitor /, one would add to plugin-conf.d:
-
-  [df*]
-    env.only /
-
-=back
-
-=head1 AUTHOR
-
-Unknown author
-
-=head1 LICENSE
-
-GPLv2
-
-=head1 MAGIC MARKERS
-
- #%# family=auto
- #%# capabilities=autoconf
-
-=cut
+# =head1 NAME
+#
+# df - Plugin to monitor disk usage (measuring byte usage in percent)
+#
+# =head1 CONFIGURATION
+#
+# This shows the default configuration
+# 
+#   [df*]
+#     env.df /usr/sbin/df
+#     env.warning 92
+#     env.critical 98
+#
+# A device specific warning/critical level is also supported.  Append
+# the munin label (shown in the plugin display page) and append _warning
+# or _critical respectively to get the (environment variable) name.
+#
+# To limit the monitored filesystems, configure the "only" environment variable.
+# For example, to only monitor /, one would add to plugin-conf.d:
+#
+#   [df*]
+#     env.only /
+#
+# =back
+#
+# =head1 AUTHOR
+#
+# Unknown author
+#
+# =head1 LICENSE
+#
+# GPLv2
+#
+# =head1 MAGIC MARKERS
+#
+#  #%# family=auto
+#  #%# capabilities=autoconf
 
 . $MUNIN_LIBDIR/plugins/plugin.sh
 

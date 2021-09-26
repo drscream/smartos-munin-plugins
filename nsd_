@@ -44,49 +44,6 @@
 #%# family=contrib
 #%# capabilities=autoconf suggest
 
-# POD documentation
-: <<=cut
-=head1 NAME
-
-nsd_ - Munin plugin to monitor the NSD server.
-
-=head1 APPLICABLE SYSTEMS
-
-System with NSD daemon.
-
-=head1 CONFIGURATION
-
-  [nsd_*]
-  user root
-  env.statefile /opt/local/var/munin/plugin-state/nsd-state
-  env.nsd_conf /opt/local/etc/nsd.conf
-  env.nsd_control /opt/local/sbin/nsd-control
-  env.nsd_checkconf /opt/local/sbin/nsd-checkconf
-
-Use the .env settings to override the defaults.
-
-=head1 USAGE
-
-Can be used to present different graphs. Use ln -s for that name in
-the plugins directory to enable the graph.
-nsd_hits		- base volume, transport type, failures 
-nsd_memory	- memory usage
-nsd_by_type	- incoming queries by type
-nsd_by_class	- incoming queries by class
-nsd_by_opcode	- incoming queries by opcode
-nsd_by_rcode	- answers by rcode
-nsd_zones		- number of zones
-
-=head1 AUTHOR
-
-Copyright 2008 W.C.A. Wijngaards
-
-=head1 LICENSE
-
-BSD
-
-=cut
-
 state=${statefile:-/opt/local/var/munin/plugin-state/nsd-state}
 conf=${nsd_conf:-/opt/local/etc/nsd/nsd.conf}
 ctrl=${nsd_control:-/opt/local/sbin/nsd-control}

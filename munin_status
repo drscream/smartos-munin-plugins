@@ -1,55 +1,52 @@
 #!/bin/sh
 # -*- sh -*-
-: <<=cut
 
-=head1 NAME
-
-munin_status - Plugin to monitor munin updates
-
-=head1 APPLICABLE SYSTEMS
-
-All systems with "sh", "pygtail", "awk" and "munin"
-
-=head1 CONFIGURATION
-
-The following is the default configuration
-
-  [munin_status]
-  user munin
-  env.muninupdate /var/log/munin/munin-update.log
-  env.pygtail /opt/local/bin/pygtail
-
-You could trigger alerts on update failures
-
-  [munin_status]
-  env.munin_fatal_critical 0
-  env.munin_error_critical 0
-  env.munin_warning_warning 0
-  env.munin_warning_critical 5
-
-=head1 INTERPRETATION
-
-This plugin shows a graph with one line per munin state:
-INFO, WARNING, ERROR, FATAL.
-
-=head1 MAGIC MARKERS
-
-  #%# family=auto
-  #%# capabilities=autoconf
-
-=head1 VERSION
-
-  0.1
-
-=head1 AUTHOR
-
-Thomas Merkel <tm@core.io>
-
-=head1 LICENSE
-
-GPLv2
-
-=cut
+# =head1 NAME
+#
+# munin_status - Plugin to monitor munin updates
+#
+# =head1 APPLICABLE SYSTEMS
+#
+# All systems with "sh", "pygtail", "awk" and "munin"
+#
+# =head1 CONFIGURATION
+#
+# The following is the default configuration
+#
+#   [munin_status]
+#   user munin
+#   env.muninupdate /var/log/munin/munin-update.log
+#   env.pygtail /opt/local/bin/pygtail
+#
+# You could trigger alerts on update failures
+#
+#   [munin_status]
+#   env.munin_fatal_critical 0
+#   env.munin_error_critical 0
+#   env.munin_warning_warning 0
+#   env.munin_warning_critical 5
+#
+# =head1 INTERPRETATION
+#
+# This plugin shows a graph with one line per munin state:
+# INFO, WARNING, ERROR, FATAL.
+#
+# =head1 MAGIC MARKERS
+#
+#   #%# family=auto
+#   #%# capabilities=autoconf
+#
+# =head1 VERSION
+#
+#   0.1
+#
+# =head1 AUTHOR
+#
+# Thomas Merkel <tm@core.io>
+#
+# =head1 LICENSE
+#
+# GPLv2
 
 
 ##############################

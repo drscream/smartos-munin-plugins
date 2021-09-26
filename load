@@ -1,48 +1,44 @@
 #!/usr/bin/bash
 # -*- sh -*-
 
-: << =cut
-
-=head1 NAME
-
-load - Plugin to monitor system load
-
-=head1 CONFIGURATION
-
-The following environment variables are used by this plugin:
-
-=over 4
-
-=item load_warning <float>
-
-Threshold for when to report a warning
-
-=item load_critical <float>
-
-Threshold for when to report a critical
-
-=back
-
-=head2 EXAMPLE CONFIGURATION
-
- [load]
-  env.load_warning 5
-  env.load_critical 10
-
-=head1 AUTHOR
-
-Unknown author
-
-=head1 LICENSE
-
-GPLv2
-
-=head1 MAGIC MARKERS
-
- #%# family=auto
- #%# capabilities=autoconf
-
-=cut
+# =head1 NAME
+#
+# load - Plugin to monitor system load
+#
+# =head1 CONFIGURATION
+#
+# The following environment variables are used by this plugin:
+#
+# =over 4
+#
+# =item load_warning <float>
+#
+# Threshold for when to report a warning
+#
+# =item load_critical <float>
+#
+# Threshold for when to report a critical
+#
+# =back
+#
+# =head2 EXAMPLE CONFIGURATION
+#
+#  [load]
+#   env.load_warning 5
+#   env.load_critical 10
+# 
+# =head1 AUTHOR
+#
+# Unknown author
+#
+# =head1 LICENSE
+#
+# GPLv2
+#
+# =head1 MAGIC MARKERS
+#
+#  #%# family=auto
+#  #%# capabilities=autoconf
 
 . $MUNIN_LIBDIR/plugins/plugin.sh
 

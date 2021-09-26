@@ -1,30 +1,26 @@
 #!/usr/bin/bash
 # -*- sh -*-
 
-: << =cut
-
-=head1 NAME
-
-paging_in - Plugin to monitor CPU usage
-
-=head1 CONFIGURATION
-
-No configuration
-
-=head1 AUTHOR
-
-Unknown author
-
-=head1 LICENSE
-
-GPLv2
-
-=head1 MAGIC MARKERS
-
- #%# family=auto
- #%# capabilities=autoconf
-
-=cut
+# =head1 NAME
+#
+# paging_in - Plugin to monitor CPU usage
+#
+# =head1 CONFIGURATION
+#
+# No configuration
+#
+# =head1 AUTHOR
+#
+# Unknown author
+#
+# =head1 LICENSE
+#
+# GPLv2
+#
+# =head1 MAGIC MARKERS
+#
+#  #%# family=auto
+#  #%# capabilities=autoconf
 
 . $MUNIN_LIBDIR/plugins/plugin.sh
 
