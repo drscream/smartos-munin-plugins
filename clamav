@@ -30,5 +30,5 @@ EOT
         exit 0
 fi
 
-echo -n "virus.value " && fgrep -c FOUND $log
+echo -n "virus.value " && grep -F -c FOUND $log
 exit 0
