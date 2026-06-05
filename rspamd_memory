@@ -1,0 +1,44 @@
+#!/bin/bash
+# Munin plugin: rspamd_memory
+#
+# Environment (munin-node plugin conf):
+#   env.rspamc      /opt/local/bin/rspamc
+#   env.rspamd_host localhost:11334
+
+RSPAMC="${rspamc:-/opt/local/bin/rspamc}"
+HOST="${rspamd_host:-localhost:11334}"
+
+fetch() {
+    LC_ALL=C "$RSPAMC" -h "$HOST" stat 2>/dev/null
+}
+
+case "$1" in
+    config)
+        cat <<'EOF'
+graph_title Rspamd memory usage
+graph_vlabel bytes
+graph_category rspamd
+graph_args --base 1024 -l 0
+bytes_allocated.label Bytes allocated
+bytes_allocated.type GAUGE
+bytes_allocated.min 0
+bytes_allocated.draw AREA
+pools_allocated.label Pools allocated
+pools_allocated.type GAUGE
+pools_allocated.min 0
+pools_allocated.draw LINE1
+pools_freed.label Pools freed
+pools_freed.type GAUGE
+pools_freed.min 0
+pools_freed.draw LINE1
+EOF
+        exit 0
+        ;;
+esac
+
+STAT=$(fetch)
+val() { printf '%s\n' "$STAT" | awk -v k="$1" '$0 ~ k { print $NF; exit }'; }
+
+echo "bytes_allocated.value $(val 'Bytes allocated:')"
+echo "pools_allocated.value $(val 'Pools allocated:')"
+echo "pools_freed.value $(val 'Pools freed:')"

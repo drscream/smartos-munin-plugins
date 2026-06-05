@@ -1,0 +1,35 @@
+#!/bin/bash
+# Munin plugin: rspamd_timing
+#
+# Environment (munin-node plugin conf):
+#   env.rspamc      /opt/local/bin/rspamc
+#   env.rspamd_host localhost:11334
+
+RSPAMC="${rspamc:-/opt/local/bin/rspamc}"
+HOST="${rspamd_host:-localhost:11334}"
+
+fetch() {
+    LC_ALL=C "$RSPAMC" -h "$HOST" stat 2>/dev/null
+}
+
+case "$1" in
+    config)
+        cat <<'EOF'
+graph_title Rspamd average scan time
+graph_vlabel seconds
+graph_category rspamd
+graph_args --base 1000 -l 0
+graph_scale no
+scan_time.label Scan time
+scan_time.type GAUGE
+scan_time.min 0
+scan_time.warning 2
+scan_time.critical 5
+EOF
+        exit 0
+        ;;
+esac
+
+STAT=$(fetch)
+scan_time=$(printf '%s\n' "$STAT" | awk '/Average scan time:/ { print $4 }')
+echo "scan_time.value ${scan_time:-U}"

@@ -17,7 +17,7 @@ case "$1" in
         cat <<'EOF'
 graph_title Rspamd message actions
 graph_vlabel messages / second
-graph_category mail
+graph_category rspamd
 graph_args --base 1000 -l 0
 graph_scale no
 no_action.label Ham (no action)
