@@ -1,0 +1,58 @@
+#!/bin/bash
+# Munin plugin: rspamd_actions
+#
+# Environment (munin-node plugin conf):
+#   env.rspamc      /opt/local/bin/rspamc
+#   env.rspamd_host localhost:11334
+
+RSPAMC="${rspamc:-rspamc}"
+HOST="${rspamd_host:-localhost:11334}"
+
+fetch() {
+    LC_ALL=C "$RSPAMC" -h "$HOST" stat 2>/dev/null
+}
+
+case "$1" in
+    config)
+        cat <<'EOF'
+graph_title Rspamd message actions
+graph_vlabel messages / second
+graph_category mail
+graph_args --base 1000 -l 0
+graph_scale no
+no_action.label Ham (no action)
+no_action.type DERIVE
+no_action.min 0
+no_action.draw AREA
+add_header.label Add header
+add_header.type DERIVE
+add_header.min 0
+add_header.draw STACK
+greylist.label Greylist
+greylist.type DERIVE
+greylist.min 0
+greylist.draw STACK
+soft_reject.label Soft reject
+soft_reject.type DERIVE
+soft_reject.min 0
+soft_reject.draw STACK
+reject.label Reject
+reject.type DERIVE
+reject.min 0
+reject.draw STACK
+EOF
+        exit 0
+        ;;
+esac
+
+STAT=$(fetch)
+
+# Output format: "Messages with action <name>: <count>, <percent>%"
+# Extract the count (before the comma) matching the given action name
+val() { printf '%s\n' "$STAT" | awk -v k="$1" '$0 ~ k { split($0, a, /: |, /); print a[2]; exit }'; }
+
+echo "no_action.value $(val 'action no action')"
+echo "add_header.value $(val 'action add header')"
+echo "greylist.value $(val 'action greylist')"
+echo "soft_reject.value $(val 'action soft reject')"
+echo "reject.value $(val 'action reject')"
