@@ -26,7 +26,8 @@
 ##
 ## 1. Download the plugin to your plugins directory (e.g. /usr/share/munin/plugins)
 ## 2. Create 3 symlinks at the directory that us used by munin for plugins detection (e.g. /etc/munin/plugins): redis_connected_clients, redis_per_sec and and redis_used_memory
-## 3. Edit plugin-conf.d/munin-node if it is needed (env.host and  env.port variables are accepted; set env.password for password protected Redis server)
+## 3. Edit plugin-conf.d/munin-node if it is needed (env.host, env.port, and env.socket variables are accepted;
+##    set env.socket to connect via Unix domain socket instead of TCP; set env.password for password protected Redis server)
 ## 4. Restart munin-node service
 ##
 ## Magic Markers
@@ -35,11 +36,15 @@
 
 use strict;
 use IO::Socket::INET;
+use IO::Socket::UNIX;
 use Switch;
 
-my $HOST = exists $ENV{'host'} ? $ENV{'host'} : "127.0.0.1";
-my $PORT = exists $ENV{'port'} ? $ENV{'port'} : 6379;
+my $HOST     = exists $ENV{'host'}     ? $ENV{'host'}     : "127.0.0.1";
+my $PORT     = exists $ENV{'port'}     ? $ENV{'port'}     : 6379;
+my $SOCKET   = exists $ENV{'socket'}   ? $ENV{'socket'}   : undef;
 my $PASSWORD = exists $ENV{'password'} ? $ENV{'password'} : undef;
+
+my $CONN_DESC = defined($SOCKET) ? "socket $SOCKET" : "$HOST:$PORT";
 
 my $sock = &get_conn();
 my $config = ( defined $ARGV[0] and $ARGV[0] eq "config" );
@@ -49,7 +54,7 @@ if ( $autoconf ) {
         print "yes\n";
         exit 0;
     } else {
-        print "no (unable to connect to $HOST\[:$PORT\])\n";
+        print "no (unable to connect to $CONN_DESC)\n";
         exit 0;
     }
 }
@@ -62,7 +67,7 @@ if ( $suggest ) {
         }
         exit 0;
     } else {
-        print "no (unable to connect to $HOST\[:$PORT\])\n";
+        print "no (unable to connect to $CONN_DESC)\n";
         exit 0;
     }
 }
@@ -222,13 +227,22 @@ switch ($0) {
 close ($sock);
 
 sub get_conn {
-    my $sock = IO::Socket::INET->new(
-        PeerAddr => $HOST,
-        PeerPort => $PORT,
-        Timeout => 10,
-        Proto => 'tcp'
-    );
-    if ( defined( $PASSWORD )  ) {
+    my $sock;
+    if ( defined($SOCKET) ) {
+        $sock = IO::Socket::UNIX->new(
+            Peer    => $SOCKET,
+            Type    => SOCK_STREAM,
+            Timeout => 10,
+        );
+    } else {
+        $sock = IO::Socket::INET->new(
+            PeerAddr => $HOST,
+            PeerPort => $PORT,
+            Timeout  => 10,
+            Proto    => 'tcp',
+        );
+    }
+    if ( defined($sock) && defined($PASSWORD) ) {
         print $sock "AUTH ", $PASSWORD, "\r\n";
         my $result = <$sock> || die "can't read socket: $!";
     }
