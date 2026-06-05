@@ -5,7 +5,7 @@
 #   env.rspamc      /opt/local/bin/rspamc
 #   env.rspamd_host localhost:11334
 
-RSPAMC="${rspamc:-rspamc}"
+RSPAMC="${rspamc:-/opt/local/bin/rspamc}"
 HOST="${rspamd_host:-localhost:11334}"
 
 fetch() {
