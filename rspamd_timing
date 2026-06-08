@@ -2,14 +2,18 @@
 # Munin plugin: rspamd_timing
 #
 # Environment (munin-node plugin conf):
-#   env.rspamc      /opt/local/bin/rspamc
-#   env.rspamd_host localhost:11334
+#   env.rspamc           /opt/local/bin/rspamc
+#   env.rspamd_host      localhost:11334
+#   env.rspamd_password  (optional)
 
 RSPAMC="${rspamc:-/opt/local/bin/rspamc}"
 HOST="${rspamd_host:-localhost:11334}"
+PASSWORD="${rspamd_password}"
 
 fetch() {
-    LC_ALL=C "$RSPAMC" -h "$HOST" stat 2>/dev/null
+    local pw_args=()
+    [ -n "$PASSWORD" ] && pw_args=(--password "$PASSWORD")
+    LC_ALL=C "$RSPAMC" -h "$HOST" "${pw_args[@]}" stat 2>/dev/null
 }
 
 case "$1" in
