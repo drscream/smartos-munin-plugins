@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if [ "$1" = "autoconf" ]; then
+	echo 'yes'
+	exit 0
+fi
+
+if [ "$1" = "config" ]; then
+	cat <<EOF
+graph_title LWPs
+graph_category processes
+graph_scale no
+graph_vlabel lwps
+graph_args --base 1000 -l 0
+graph_info Number of LWPs
+lwps.label light weight processes
+EOF
+fi
+
+prctl -P -n zone.max-lwps $$ | awk '
+$1 == "zone.max-lwps" && $2 == "usage" {
+	print "lwps.value", $3
+}
+$1 == "zone.max-lwps" && $2 == "privileged" {
+	printf "lwps.warning :%d\n", $3 * .9
+	printf "lwps.critical :%d\n", $3
+}
+'
+
